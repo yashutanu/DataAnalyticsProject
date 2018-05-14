@@ -1,0 +1,227 @@
+library(e1071)
+library(caret)
+library(Rcpp)
+library(ggplot2)
+##for confusion matrix
+## two-way contingency table of categorical outcome and predictors
+## we want to make sure there are not 0 cells
+xtabs(~Age+hours_spent,data=codetrain)
+
+hours_spent
+Age   1  2  3  4  5  6  7  8  9
+  19  0  0  2  2  4  3  0  0  0
+  20  1  4  2  5 11  6  2  1  1
+  21  1  1  3  2  1  3  1  0  0
+  22  0  0  1  0  0  0  0  0  0
+  23  0  0  1  0  0  0  0  0  0
+ 
+#train data 
+model_grades=svm(Internship~algorithm+Data_structure,data=codetrain,kernel="linear")
+pred_train_grades = predict(model_grades,codetrain)
+t1=table(pred_train_grades,codetrain$Internship)
+pred_train_grades
+confusionMatrix(t1)
+
+Confusion Matrix and Statistics
+
+                 
+pred_train_grades no yes
+              no   6   2
+              yes  8  42
+                                          
+               Accuracy : 0.8276          
+                 95% CI : (0.7057, 0.9141)
+    No Information Rate : 0.7586          
+    P-Value [Acc > NIR] : 0.1402          
+                                          
+                  Kappa : 0.4487          
+ Mcnemar's Test P-Value : 0.1138          
+                                          
+            Sensitivity : 0.4286          
+            Specificity : 0.9545          
+         Pos Pred Value : 0.7500          
+         Neg Pred Value : 0.8400          
+             Prevalence : 0.2414          
+         Detection Rate : 0.1034          
+   Detection Prevalence : 0.1379          
+      Balanced Accuracy : 0.6916          
+                                          
+       'Positive' Class : no             
+	   
+
+#test data 
+model_grades1=svm(Internship~algorithm+Data_structure,data=codetest,kernel="linear")
+pred_train_grades1 = predict(model_grades1,codetest)
+t4=table(pred_train_grades1,codetest$Internship)
+pred_train_grades1
+confusionMatrix(t4)
+	   
+Confusion Matrix and Statistics
+
+                  
+pred_train_grades1 no yes
+               no   0   0
+               yes 14  45
+                                          
+               Accuracy : 0.7627          
+                 95% CI : (0.6341, 0.8638)
+    No Information Rate : 0.7627          
+    P-Value [Acc > NIR] : 0.571086        
+                                          
+                  Kappa : 0               
+ Mcnemar's Test P-Value : 0.000512        
+                                          
+            Sensitivity : 0.0000          
+            Specificity : 1.0000          
+         Pos Pred Value :    NaN          
+         Neg Pred Value : 0.7627          
+             Prevalence : 0.2373          
+         Detection Rate : 0.0000          
+   Detection Prevalence : 0.0000          
+      Balanced Accuracy : 0.5000          
+                                          
+       'Positive' Class : no      
+	   
+	   
+#train data	   
+model_all1 =svm(Internship~Age+no_of_contest_win+Resource+algorithm+Data_structure,data=codetrain,kernel ="linear")
+pred_train_all1 = predict(model_all1,codetrain)
+tab<-table(pred_train_all1,codetrain$Internship)
+pred_train_all1
+# load Caret package for computing Confusion matrix
+confusionMatrix(tab)
+
+Confusion Matrix and Statistics
+
+               
+pred_train_all1 no yes
+            no  10   1
+            yes  4  43
+                                          
+               Accuracy : 0.9138          
+                 95% CI : (0.8102, 0.9714)
+    No Information Rate : 0.7586          
+    P-Value [Acc > NIR] : 0.002252        
+                                          
+                  Kappa : 0.7461          
+ Mcnemar's Test P-Value : 0.371093        
+                                          
+            Sensitivity : 0.7143          
+            Specificity : 0.9773          
+         Pos Pred Value : 0.9091          
+         Neg Pred Value : 0.9149          
+             Prevalence : 0.2414          
+         Detection Rate : 0.1724          
+   Detection Prevalence : 0.1897          
+      Balanced Accuracy : 0.8458          
+                                          
+       'Positive' Class : no          
+
+	   
+	   
+#test data set
+model_all_test1 =svm(Internship~Age+no_of_contest_win+Resource+algorithm+Data_structure,data=codetest,kernel ="linear")
+pred_test_all1 = predict(model_all_test1,codetest)
+t2=table(pred_test_all1,codetest$Internship)
+pred_test_all1
+confusionMatrix(t2)
+
+Confusion Matrix and Statistics
+
+              
+pred_test_all1 no yes
+           no   6   2
+           yes  8  43
+                                          
+               Accuracy : 0.8305          
+                 95% CI : (0.7103, 0.9156)
+    No Information Rate : 0.7627          
+    P-Value [Acc > NIR] : 0.1408          
+                                          
+                  Kappa : 0.4507          
+ Mcnemar's Test P-Value : 0.1138          
+                                          
+            Sensitivity : 0.4286          
+            Specificity : 0.9556          
+         Pos Pred Value : 0.7500          
+         Neg Pred Value : 0.8431          
+             Prevalence : 0.2373          
+         Detection Rate : 0.1017          
+   Detection Prevalence : 0.1356          
+      Balanced Accuracy : 0.6921          
+                                          
+       'Positive' Class : no     
+	   
+	   
+	   
+#based on age,no_of_contest_won,resource,grades,list of projects done
+#train data
+model_pro1=svm(Internship~Age+no_of_contest_win+Resource+algorithm+Data_structure+research+paper_presentation+web+operating_system+data_science+app+back_end,data=codetrain,kernel='linear')
+pred_train_pro1= predict(model_pro1,codetrain)
+tab2=table(pred_train_pro1,codetrain$Internship)
+pred_train_pro1
+# load Caret package for computing Confusion matrix
+confusionMatrix(tab2)
+
+
+Confusion Matrix and Statistics
+
+               
+pred_train_pro1 no yes
+            no  10   0
+            yes  4  44
+                                          
+               Accuracy : 0.931           
+                 95% CI : (0.8327, 0.9809)
+    No Information Rate : 0.7586          
+    P-Value [Acc > NIR] : 0.0006083       
+                                          
+                  Kappa : 0.7914          
+ Mcnemar's Test P-Value : 0.1336144       
+                                          
+            Sensitivity : 0.7143          
+            Specificity : 1.0000          
+         Pos Pred Value : 1.0000          
+         Neg Pred Value : 0.9167          
+             Prevalence : 0.2414          
+         Detection Rate : 0.1724          
+   Detection Prevalence : 0.1724          
+      Balanced Accuracy : 0.8571          
+                                          
+       'Positive' Class : no       
+	   
+	   
+#test data
+model_pro=svm(Internship~Age+no_of_contest_win+Resource+algorithm+Data_structure+research+paper_presentation+web+operating_system+data_science+app+back_end,data=codetest,kernel='linear')
+pred_train_pro= predict(model_pro,codetest)
+tab1=table(pred_train_pro,codetest$Internship)
+pred_train_pro
+# load Caret package for computing Confusion matrix
+confusionMatrix(tab1)
+
+Confusion Matrix and Statistics
+
+              
+pred_train_pro no yes
+           no   8   2
+           yes  6  43
+                                          
+               Accuracy : 0.8644          
+                 95% CI : (0.7502, 0.9396)
+    No Information Rate : 0.7627          
+    P-Value [Acc > NIR] : 0.04032         
+                                          
+                  Kappa : 0.5845          
+ Mcnemar's Test P-Value : 0.28884         
+                                          
+            Sensitivity : 0.5714          
+            Specificity : 0.9556          
+         Pos Pred Value : 0.8000          
+         Neg Pred Value : 0.8776          
+             Prevalence : 0.2373          
+         Detection Rate : 0.1356          
+   Detection Prevalence : 0.1695          
+      Balanced Accuracy : 0.7635          
+                                          
+       'Positive' Class : no              
+                                  
